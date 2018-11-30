@@ -45,11 +45,11 @@ function find_img ($html, $type, $folder){
         }
     }
 
-    foreach($html->find('img') as $el) {		
+    foreach($html->find('img') as $el) {
         if ((substr($el->src, strlen($el->src)-3, 3) == $type) and (substr($el->src, 0, 4) == 'http')){
             $pieces = explode('/', $el->src);
             $name = $pieces[count($pieces)-1];
-            file_put_contents($folder.'/'.$name, file_get_contents($el->src), FILE_APPEND);			
+            file_put_contents($folder.'/'.$name, file_get_contents($el->src), FILE_APPEND);
         }
     }
 
