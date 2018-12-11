@@ -36,8 +36,8 @@ function curl_get ($url, $referer = 'https://www.google.com.ua/'){
 }
 
 function find_img ($html, $type, $folder){
-
-    foreach($html->find('a') as $el) {
+	
+	foreach($html->find('a') as $el) {
         if ((substr($el->href, strlen($el->href)-3, 3) == $type) and (substr($el->href, 0, 4) == 'http')){
             $pieces = explode('/', $el->href);
             $name = $pieces[count($pieces)-1];
@@ -46,7 +46,13 @@ function find_img ($html, $type, $folder){
     }
 
     foreach($html->find('img') as $el) {
-        if ((substr($el->src, strlen($el->src)-3, 3) == $type) and (substr($el->src, 0, 4) == 'http')){
+	if (substr($el->{'data-src'}, 0, 4) == 'http'){
+            $pieces = explode('/', $el->{'data-src'});
+            $name = $pieces[count($pieces)-1];
+			$name = explode('.'.$type, $name);
+            file_put_contents($folder.'/'.$name[0].'.'.$type, file_get_contents($el->{'data-src'}), FILE_APPEND);
+        }
+		if ((substr($el->src, strlen($el->src)-3, 3) == $type) and (substr($el->src, 0, 4) == 'http')){
             $pieces = explode('/', $el->src);
             $name = $pieces[count($pieces)-1];
             file_put_contents($folder.'/'.$name, file_get_contents($el->src), FILE_APPEND);
